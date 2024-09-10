@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Summarizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
+        .result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Quizee</h1>
+    <h2>Text Summarizer</h2>
+    <textarea id="inputText" placeholder="Enter text to summarize..."></textarea>
+    <button onclick="summarizeText()">Summarize</button>
+    <div class="result">
+        <h2>Summary:</h2>
+        <textarea id="outputText" readonly></textarea>
+    </div>
+
+    <script>
+        async function summarizeText() {
+            const text = document.getElementById('inputText').value;
+
+            const response = await fetch('/summarize', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                document.getElementById('outputText').value = data.summary;
+            } else {
+                document.getElementById('outputText').value = 'Error: ' + data.error;
+            }
+        }
+    </script>
+</body>
+
+</html>
